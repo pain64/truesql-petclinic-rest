@@ -10,7 +10,7 @@ import java.util.List;
 
 import static com.example.demo.PetClinic.*;
 
-import com.example.demo.api.SpecialtyApiTrueSql.*;
+import com.example.demo.api.SpecialtyApiG.*;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @TrueSql @RestController class SpecialtyApi {
@@ -20,8 +20,8 @@ import com.example.demo.api.SpecialtyApiTrueSql.*;
     private List<Specialty> find(@Nullable Integer id) {
         return ds.q("""
             select id, name from specialties
-            where (id = ? or ?::int is null) order by id""",
-            id, id
+            where (? or id = ?) order by id""",
+            id == null, id
         ).g.fetchList(Specialty.class);
     }
 
@@ -43,7 +43,7 @@ import com.example.demo.api.SpecialtyApiTrueSql.*;
         @RequestBody SpecialtyFields f
     ) {
         return ds.q("insert into specialties values(default, ?) returning id", f.name)
-            .fetchOne(Integer.class);
+            .fetchOne(int.class);
     }
 
     @PutMapping(value = "/specialties/{specialtyId}") void update(

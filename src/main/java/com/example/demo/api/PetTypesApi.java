@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import com.example.demo.api.PetTypesApiTrueSql.*;
+import com.example.demo.api.PetTypesApiG.*;
 
 import static com.example.demo.PetClinic.*;
 

@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.demo.api.PetsApiTrueSql.Pet;
+import com.example.demo.api.PetsApiG.Pet;
 
 import java.time.LocalDate;
 

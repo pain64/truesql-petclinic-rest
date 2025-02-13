@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static com.example.demo.PetClinic.*;
-import static net.truej.sql.source.Parameters.unfold;
+import static net.truej.sql.fetch.Parameters.unfold;
 
-import com.example.demo.api.VetsApiTrueSql.*;
+import com.example.demo.api.VetsApiG.*;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @TrueSql @RestController class VetsApi {
@@ -29,8 +29,8 @@ import com.example.demo.api.VetsApiTrueSql.*;
                 from vets v
                 left join vet_specialties vsp on v.id = vsp.vet_id
                 left join specialties sp on vsp.specialty_id = sp.id
-                where v.id = ? or ?::int is null order by v.id""",
-            id, id
+                where (? or v.id = ?) order by v.id""",
+            id == null, id
         ).g.fetchList(Vet.class);
     }
 
@@ -63,7 +63,7 @@ import com.example.demo.api.VetsApiTrueSql.*;
                 insert into vet_specialties
                 select t1.id, sp.id::int from t1 cross join sp""",
             f.firstName, f.lastName,
-            unfold(f.specialties, s -> new Object[]{s.id})
+            unfold(f.specialties, s -> new Object[]{String.valueOf(s.id)})
         ).fetchNone();
     }
 
@@ -74,9 +74,10 @@ import com.example.demo.api.VetsApiTrueSql.*;
             cn.q("""
                     update vets set first_name = ?, last_name = ? where id = ?;
                     delete from vet_specialties where vet_id = ?;
-                    insert into vet_specialties select ?, sp.id::int from (values ?) as sp(id)""",
+                    insert into vet_specialties
+                        select ?, sp.id::int from (values ?) as sp(id)""",
                 f.firstName, f.lastName, vetId, vetId,
-                vetId, unfold(f.specialties, s -> new Object[]{s.id})
+                vetId, unfold(f.specialties, s -> new Object[]{String.valueOf(s.id)})
             ).fetchNone()
         );
     }

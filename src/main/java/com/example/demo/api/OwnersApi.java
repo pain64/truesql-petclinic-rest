@@ -1,38 +1,32 @@
 package com.example.demo.api;
 
 import net.truej.sql.TrueSql;
-import net.truej.sql.dsl.Constraint;
-import net.truej.sql.dsl.ConstraintViolationException;
+// import net.truej.sql.dsl.Constraint;
+// import net.truej.sql.dsl.ConstraintViolationException;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.example.demo.PetClinic.MainDb;
-import com.example.demo.api.OwnersApiTrueSql.*;
+import com.example.demo.api.OwnersApiG.*;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @TrueSql @RestController class OwnersApi {
-    // Функции
-    // f(x, y) =
-    // f(self, x, y) =
-    // F: (S, Args) -> (Result, S')
-    // The test:
-    //  1. задание контекста S
-    //  2. apply F (S, Args)
-    //  3. assert Result
-    //  4. assert S'
-    // Module ~ Function
-
-    // bar() {
-    //     writeFile()
-    //     httpRequestBody()
-    // }
 
     @Autowired MainDb ds;
 
+    @Nullable <T> T firstOrNull(List<T> list) {
+        return list.isEmpty() ? null : list.getFirst();
+    }
+
     private List<Owner> find(@Nullable Integer id, @Nullable String lastName) {
+
+        // ds.q("select gen_random_uuid()").g.fetchOne(XXX.class);
+
         return ds.q("""
                 select
                     o.id                                          ,
@@ -56,12 +50,12 @@ import com.example.demo.api.OwnersApiTrueSql.*;
                     left join types  t on t.id     = p.type_id
                     left join visits v on v.pet_id = p.id
                 where
-                     (o.last_name like ? or ?::text is null) and
-                     (o.id           = ? or ?::int  is null)
+                     (? or o.last_name like ? || '%') and
+                     (? or o.id = ?                 )
                 order by o.id, p.id
                 """,
-            (lastName == null ? "" : lastName) + "%", lastName,
-            id, id
+            lastName == null, lastName,
+            id == null, id
         ).g.fetchList(Owner.class);
     }
 
@@ -71,11 +65,11 @@ import com.example.demo.api.OwnersApiTrueSql.*;
         return find(null, lastName);
     }
 
-    @GetMapping("/owners/{ownerId}") Owner get(
+    @GetMapping(value = "/owners/{ownerId}", produces="application/json")
+    @Nullable Owner get(
         @PathVariable("ownerId") int ownerId
     ) {
-        var owners = find(ownerId, null);
-        return owners.isEmpty() ? null : owners.getFirst();
+        return firstOrNull(find(ownerId, null));
     }
 
     record OwnerFields(

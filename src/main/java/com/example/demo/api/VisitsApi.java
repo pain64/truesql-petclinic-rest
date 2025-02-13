@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 
-import com.example.demo.api.VisitsApiTrueSql.*;
+import com.example.demo.api.VisitsApiG.*;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @TrueSql @RestController class VisitsApi {

@@ -18,9 +18,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
     @Test void all() throws Exception {
         ds.q("""
-            INSERT INTO specialties VALUES (1, 'radiology') ON CONFLICT DO NOTHING;
-            INSERT INTO specialties VALUES (2, 'surgery') ON CONFLICT DO NOTHING;
-            INSERT INTO specialties VALUES (3, 'dentistry') ON CONFLICT DO NOTHING;
+            INSERT INTO specialties VALUES (1, 'radiology');
+            INSERT INTO specialties VALUES (2, 'surgery');
+            INSERT INTO specialties VALUES (3, 'dentistry');
             """).fetchNone();
 
         mvc.perform(
