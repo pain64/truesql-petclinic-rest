@@ -16,22 +16,21 @@ import java.sql.Types;
 import java.util.UUID;
 
 @SpringBootApplication public class PetClinic {
-
-//    public static class UuidReadWrite extends AsObjectReadWrite<UUID> {
-//        @Override public Class<UUID> aClass() { return UUID.class; }
-//        @Override public int sqlType() { return Types.OTHER; }
-//    }
+    //    public static class UuidReadWrite extends AsObjectReadWrite<UUID> {
+    //        @Override public Class<UUID> aClass() { return UUID.class; }
+    //        @Override public int sqlType() { return Types.OTHER; }
+    //    }
 
     @Configuration(
         checks = @CompileTimeChecks(
-            url = "jdbc:postgresql://localhost:5432/petclinic",
-            username = "sa",
+            url = "jdbc:postgresql://localhost:5433/postgres",
+            username = "postgres",
             password = "1234"
         )
-//        , typeBindings = @TypeBinding(
-//            compatibleSqlTypeName = "uuid",
-//            rw = UuidReadWrite.class
-//        )
+        //, typeBindings = @TypeBinding(
+        //  compatibleSqlTypeName = "uuid",
+        //  rw = UuidReadWrite.class
+        //)
     ) public static class MainDb extends DataSourceW {
          public MainDb(DataSource w) { super(w); }
     }
