@@ -17,11 +17,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     @Autowired MainDb ds;
 
     @Test void all() throws Exception {
-        ds.q("""
-            INSERT INTO specialties VALUES (1, 'radiology');
-            INSERT INTO specialties VALUES (2, 'surgery');
-            INSERT INTO specialties VALUES (3, 'dentistry');
-            """).fetchNone();
+//  FIXME: remove test data from migrations ???
+
+//        ds.q("""
+//            INSERT INTO specialties VALUES (1, 'radiology');
+//            INSERT INTO specialties VALUES (2, 'surgery');
+//            INSERT INTO specialties VALUES (3, 'dentistry');
+//            """).fetchNone();
 
         mvc.perform(
             get("/specialties")
