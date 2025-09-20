@@ -26,7 +26,7 @@ flyway {
 	locations  = arrayOf("filesystem:./src/main/resources/db/migration")
 }
 
-var trueSqlVersion = "3.0.0-beta9"
+var trueSqlVersion = "3.0.0-beta11"
 
 dependencies {
 	annotationProcessor("net.truej:sql:$trueSqlVersion")
